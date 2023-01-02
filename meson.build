@@ -1,5 +1,5 @@
 project('minisat', 'cpp',
-  version : '0.1',
+  version : '2.2.2',
   default_options : ['warning_level=3'])
 
 src = [
