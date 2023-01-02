@@ -3,6 +3,7 @@ project('minisat', 'cpp',
   default_options : ['warning_level=3'])
 
 src = [
+  'minisat/capi/cminisat.cc',
   'minisat/core/Solver.cc',
   'minisat/simp/SimpSolver.cc',
   'minisat/utils/Options.cc',
@@ -20,6 +21,7 @@ exe_simp = executable('minisat_simp', 'minisat/simp/Main.cc',
   install : true, link_with : lib, dependencies : zdep)
 
 install_headers(
+  'minisat/capi/cminisat.h',
   'minisat/core/Dimacs.h',
   'minisat/core/Solver.h',
   'minisat/core/SolverTypes.h',
