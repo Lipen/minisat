@@ -32,7 +32,33 @@ jobs:
         run: pip install meson ninja
 
       - name: Setup Meson build directory
-        run: meson setup builddir
+        run: meson setup builddir --builttype release --strip
 
       - name: Build the project using Meson
-        run: meson compile -C builddir -v
+        run: meson compile -C builddir
+
+      # OS-specific upload:
+
+      - name: Upload Linux package
+        if: startsWith(matrix.os, 'linux')
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-${{ matrix.os }}
+          path: |
+            builddir/libminisat.so
+
+      - name: Upload Windows package
+        if: startsWith(matrix.os, 'windows')
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-${{ matrix.os }}
+          path: |
+            builddir/libminisat.dll
+
+      - name: Upload macOS package
+        if: startsWith(matrix.os, 'macos')
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-${{ matrix.os }}
+          path: |
+            builddir/libminisat.dylib
