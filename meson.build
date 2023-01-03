@@ -1,6 +1,4 @@
-project('minisat', 'cpp',
-  version : '2.2.2',
-  default_options : ['warning_level=3'])
+project('minisat', 'cpp', version : '2.2.2')
 
 src = [
   'minisat/capi/cminisat.cc',
