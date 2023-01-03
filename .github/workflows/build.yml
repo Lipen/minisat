@@ -40,7 +40,7 @@ jobs:
       # OS-specific upload:
 
       - name: Upload Linux package
-        if: startsWith(matrix.os, 'linux')
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v3
         with:
           name: package-${{ matrix.os }}
