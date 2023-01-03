@@ -28,8 +28,8 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Install Meson
-        run: pip install meson
+      - name: Install Meson and Ninja
+        run: pip install meson ninja
 
       - name: Setup Meson build directory
         run: meson setup builddir --buildtype release
