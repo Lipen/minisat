@@ -37,34 +37,11 @@ jobs:
       - name: Build the project using Meson
         run: meson compile -C builddir -v
 
-      # OS-specific upload:
+      - name: Install the project
+        run: meson install -C builddir --strip --destdir ../install
 
-      - name: Upload Linux package
-        if: startsWith(matrix.os, 'ubuntu')
+      - name: Upload package
         uses: actions/upload-artifact@v3
         with:
           name: package-${{ matrix.os }}
-          path: |
-            builddir/libminisat.so
-            builddir/minisat_core
-            builddir/minisat_simp
-
-      - name: Upload Windows package
-        if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-artifact@v3
-        with:
-          name: package-${{ matrix.os }}
-          path: |
-            builddir/libminisat.dll
-            builddir/minisat_core.exe
-            builddir/minisat_simp.exe
-
-      - name: Upload macOS package
-        if: startsWith(matrix.os, 'macos')
-        uses: actions/upload-artifact@v3
-        with:
-          name: package-${{ matrix.os }}
-          path: |
-            builddir/libminisat.dylib
-            builddir/minisat_core
-            builddir/minisat_simp
+          path: install/
