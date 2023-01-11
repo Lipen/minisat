@@ -36,6 +36,10 @@ extern const minisat_lbool minisat_l_True;
 extern const minisat_lbool minisat_l_False;
 extern const minisat_lbool minisat_l_Undef;
 
+minisat_lbool minisat_get_l_True(void);
+minisat_lbool minisat_get_l_False(void);
+minisat_lbool minisat_get_l_Undef(void);
+
 const char *minisat_signature(void);
 CMinisat *minisat_init(void);
 void minisat_release(CMinisat *s);
@@ -46,9 +50,15 @@ minisat_Lit minisat_newLit(CMinisat *s);
 minisat_Lit minisat_mkLit(minisat_Var x);
 minisat_Lit minisat_mkLit_args(minisat_Var x, int sign);
 minisat_Lit minisat_negate(minisat_Lit p);
-
 minisat_Var minisat_var(minisat_Lit p);
 bool minisat_sign(minisat_Lit p);
+
+void minisat_setPolarity(CMinisat *s, minisat_Var v, minisat_lbool lb);
+void minisat_setDecisionVar(CMinisat *s, minisat_Var v, bool b);
+
+void minisat_setFrozen(CMinisat *s, minisat_Var v, bool b);
+bool minisat_isEliminated(CMinisat *s, minisat_Var v);
+bool minisat_eliminate(CMinisat *s, bool turn_off_elim);
 
 bool minisat_addClause(CMinisat *s, int len, minisat_Lit *ps);
 void minisat_addClause_begin(CMinisat *s);
@@ -66,23 +76,10 @@ minisat_lbool minisat_limited_solve_commit(CMinisat *s);
 
 bool minisat_okay(CMinisat *s);
 
-void minisat_setPolarity(CMinisat *s, minisat_Var v, int b);
-void minisat_setDecisionVar(CMinisat *s, minisat_Var v, int b);
-
-minisat_lbool minisat_get_l_True(void);
-minisat_lbool minisat_get_l_False(void);
-minisat_lbool minisat_get_l_Undef(void);
-
 minisat_lbool minisat_value_Var(CMinisat *s, minisat_Var x);
 minisat_lbool minisat_value_Lit(CMinisat *s, minisat_Lit p);
 minisat_lbool minisat_modelValue_Var(CMinisat *s, minisat_Var x);
 minisat_lbool minisat_modelValue_Lit(CMinisat *s, minisat_Lit p);
-
-int minisat_num_assigns(CMinisat *s);
-int minisat_num_clauses(CMinisat *s);
-int minisat_num_learnts(CMinisat *s);
-int minisat_num_vars(CMinisat *s);
-int minisat_num_freeVars(CMinisat *s);
 
 int minisat_conflict_len(CMinisat *s);
 minisat_Lit minisat_conflict_nthLit(CMinisat *s, int i);
@@ -91,21 +88,19 @@ void minisat_set_conf_budget(CMinisat *s, int x);
 void minisat_set_prop_budget(CMinisat *s, int x);
 void minisat_no_budget(CMinisat *s);
 
-// Resource constraints:
 void minisat_interrupt(CMinisat *s);
 void minisat_clearInterrupt(CMinisat *s);
 
-// SimpSolver methods:
-void minisat_setFrozen(CMinisat *s, minisat_Var v, bool b);
-bool minisat_isEliminated(CMinisat *s, minisat_Var v);
-bool minisat_eliminate(CMinisat *s, bool turn_off_elim);
-
-// Setters:
-
 void minisat_set_verbosity(CMinisat *s, int v);
+int minisat_get_verbosity(CMinisat *s);
+void minisat_set_random_var_freq(CMinisat *s, double random_var_freq);
+void minisat_set_random_seed(CMinisat *s, double random_seed);
 
-// Getters:
-
+int minisat_num_assigns(CMinisat *s);
+int minisat_num_clauses(CMinisat *s);
+int minisat_num_learnts(CMinisat *s);
+int minisat_num_vars(CMinisat *s);
+int minisat_num_freeVars(CMinisat *s);
 int64_t minisat_num_conflicts(CMinisat *s);
 int64_t minisat_num_decisions(CMinisat *s);
 int64_t minisat_num_restarts(CMinisat *s);

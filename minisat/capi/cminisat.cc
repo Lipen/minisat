@@ -59,21 +59,30 @@ minisat_lbool minisat_get_l_True(void) { return minisat_l_True; }
 minisat_lbool minisat_get_l_False(void) { return minisat_l_False; }
 minisat_lbool minisat_get_l_Undef(void) { return minisat_l_Undef; }
 
-// Solver C-API wrapper functions:
-//
 const char *minisat_signature(void) { return "minisat"; }
 CMinisat *minisat_init(void) { return new CMinisat(); }
 void minisat_release(CMinisat *s) { delete s; }
+
 minisat_Var minisat_newVar(CMinisat *s) { return s->newVar(); }
 minisat_Lit minisat_newLit(CMinisat *s) { return toInt(mkLit(s->newVar())); }
+
 minisat_Lit minisat_mkLit(minisat_Var x) { return toInt(mkLit(x)); }
 minisat_Lit minisat_mkLit_args(minisat_Var x, int sign) { return toInt(mkLit(x, sign)); }
 minisat_Lit minisat_negate(minisat_Lit p) { return toInt(~toLit(p)); }
 minisat_Var minisat_var(minisat_Lit p) { return var(toLit(p)); }
 bool minisat_sign(minisat_Lit p) { return sign(toLit(p)); }
+
+void minisat_setPolarity(CMinisat *s, minisat_Var v, minisat_lbool lb) { s->setPolarity(v, fromC(lb)); }
+void minisat_setDecisionVar(CMinisat *s, minisat_Var v, bool b) { s->setDecisionVar(v, b); }
+
+void minisat_setFrozen(CMinisat *s, minisat_Var v, bool b) { s->setFrozen(v, b); }
+bool minisat_isEliminated(CMinisat *s, minisat_Var v) { return s->isEliminated(v); }
+bool minisat_eliminate(CMinisat *s, bool turn_off_elim) { return s->eliminate(turn_off_elim); }
+
 void minisat_addClause_begin(CMinisat *s) { s->clause.clear(); }
 void minisat_addClause_addLit(CMinisat *s, minisat_Lit p) { s->clause.push(toLit(p)); }
 bool minisat_addClause_commit(CMinisat *s) { return s->addClause_(s->clause); }
+
 bool minisat_simplify(CMinisat *s) { return s->simplify(); }
 
 // NOTE: Currently these run with default settings for implicitly calling preprocessing. Turn off
@@ -84,37 +93,36 @@ bool minisat_solve_commit(CMinisat *s) { return s->solve(s->assumps); }
 minisat_lbool minisat_limited_solve_commit(CMinisat *s) { return toC(s->solveLimited(s->assumps)); }
 
 bool minisat_okay(CMinisat *s) { return s->okay(); }
-void minisat_setPolarity(CMinisat *s, minisat_Var v, minisat_lbool lb) { s->setPolarity(v, fromC(lb)); }
-void minisat_setDecisionVar(CMinisat *s, minisat_Var v, int b) { s->setDecisionVar(v, b); }
+
 minisat_lbool minisat_value_Var(CMinisat *s, minisat_Var x) { return toC(s->value(x)); }
 minisat_lbool minisat_value_Lit(CMinisat *s, minisat_Lit p) { return toC(s->value(toLit(p))); }
 minisat_lbool minisat_modelValue_Var(CMinisat *s, minisat_Var x) { return toC(s->modelValue(x)); }
 minisat_lbool minisat_modelValue_Lit(CMinisat *s, minisat_Lit p) { return toC(s->modelValue(toLit(p))); }
+
+int minisat_conflict_len(CMinisat *s) { return s->conflict.size(); }
+minisat_Lit minisat_conflict_nthLit(CMinisat *s, int i) { return toInt(s->conflict[i]); }
+
+void minisat_set_conf_budget(CMinisat *s, int x) { s->setConfBudget(x); }
+void minisat_set_prop_budget(CMinisat *s, int x) { s->setPropBudget(x); }
+void minisat_no_budget(CMinisat *s) { s->budgetOff(); }
+
+void minisat_interrupt(CMinisat *s) { s->interrupt(); }
+void minisat_clearInterrupt(CMinisat *s) { s->clearInterrupt(); }
+
+void minisat_set_verbosity(CMinisat *s, int v) { s->verbosity = v; }
+int minisat_get_verbosity(CMinisat *s) { return s->verbosity; }
+void minisat_set_random_var_freq(CMinisat *s, double random_var_freq) { s->random_var_freq = random_var_freq; }
+void minisat_set_random_seed(CMinisat *s, double random_seed) { s->random_seed = random_seed; }
+
 int minisat_num_assigns(CMinisat *s) { return s->nAssigns(); }
 int minisat_num_clauses(CMinisat *s) { return s->nClauses(); }
 int minisat_num_learnts(CMinisat *s) { return s->nLearnts(); }
 int minisat_num_vars(CMinisat *s) { return s->nVars(); }
 int minisat_num_freeVars(CMinisat *s) { return s->nFreeVars(); }
-int minisat_conflict_len(CMinisat *s) { return s->conflict.size(); }
-minisat_Lit minisat_conflict_nthLit(CMinisat *s, int i) { return toInt(s->conflict[i]); }
-void minisat_set_verbosity(CMinisat *s, int v) { s->verbosity = v; }
-int minisat_get_verbosity(CMinisat *s) { return s->verbosity; }
 int64_t minisat_num_conflicts(CMinisat *s) { return (int64_t)s->conflicts; }
 int64_t minisat_num_decisions(CMinisat *s) { return (int64_t)s->decisions; }
 int64_t minisat_num_restarts(CMinisat *s) { return (int64_t)s->starts; }
 int64_t minisat_num_propagations(CMinisat *s) { return (int64_t)s->propagations; }
-void minisat_set_conf_budget(CMinisat *s, int x) { s->setConfBudget(x); }
-void minisat_set_prop_budget(CMinisat *s, int x) { s->setPropBudget(x); }
-void minisat_no_budget(CMinisat *s) { s->budgetOff(); }
-
-// Resource constraints:
-void minisat_interrupt(CMinisat *s) { s->interrupt(); }
-void minisat_clearInterrupt(CMinisat *s) { s->clearInterrupt(); }
-
-// SimpSolver methods:
-void minisat_setFrozen(CMinisat *s, minisat_Var v, bool b) { s->setFrozen(v, b); }
-bool minisat_isEliminated(CMinisat *s, minisat_Var v) { return s->isEliminated(v); }
-bool minisat_eliminate(CMinisat *s, bool turn_off_elim) { return s->eliminate(turn_off_elim); }
 
 // Convenience functions for actual c-programmers (not language interfacing people):
 //
