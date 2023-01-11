@@ -27,7 +27,7 @@ extern "C" {
 
 #include <stdint.h>
 
-typedef struct CMinisat CMinisat;
+typedef struct CMiniSat CMiniSat;
 typedef int minisat_Var;
 typedef int minisat_Lit;
 typedef int minisat_lbool;
@@ -41,11 +41,11 @@ minisat_lbool minisat_get_l_False(void);
 minisat_lbool minisat_get_l_Undef(void);
 
 const char *minisat_signature(void);
-CMinisat *minisat_init(void);
-void minisat_release(CMinisat *s);
+CMiniSat *minisat_init(void);
+void minisat_release(CMiniSat *s);
 
-minisat_Var minisat_newVar(CMinisat *s);
-minisat_Lit minisat_newLit(CMinisat *s);
+minisat_Var minisat_newVar(CMiniSat *s);
+minisat_Lit minisat_newLit(CMiniSat *s);
 
 minisat_Lit minisat_mkLit(minisat_Var x);
 minisat_Lit minisat_mkLit_args(minisat_Var x, int sign);
@@ -53,58 +53,58 @@ minisat_Lit minisat_negate(minisat_Lit p);
 minisat_Var minisat_var(minisat_Lit p);
 bool minisat_sign(minisat_Lit p);
 
-void minisat_setPolarity(CMinisat *s, minisat_Var v, minisat_lbool lb);
-void minisat_setDecisionVar(CMinisat *s, minisat_Var v, bool b);
+void minisat_setPolarity(CMiniSat *s, minisat_Var v, minisat_lbool lb);
+void minisat_setDecisionVar(CMiniSat *s, minisat_Var v, bool b);
 
-void minisat_setFrozen(CMinisat *s, minisat_Var v, bool b);
-bool minisat_isEliminated(CMinisat *s, minisat_Var v);
-bool minisat_eliminate(CMinisat *s, bool turn_off_elim);
+void minisat_setFrozen(CMiniSat *s, minisat_Var v, bool b);
+bool minisat_isEliminated(CMiniSat *s, minisat_Var v);
+bool minisat_eliminate(CMiniSat *s, bool turn_off_elim);
 
-bool minisat_addClause(CMinisat *s, int len, minisat_Lit *ps);
-void minisat_addClause_begin(CMinisat *s);
-void minisat_addClause_addLit(CMinisat *s, minisat_Lit p);
-bool minisat_addClause_commit(CMinisat *s);
+bool minisat_addClause(CMiniSat *s, int len, minisat_Lit *ps);
+void minisat_addClause_begin(CMiniSat *s);
+void minisat_addClause_addLit(CMiniSat *s, minisat_Lit p);
+bool minisat_addClause_commit(CMiniSat *s);
 
-bool minisat_simplify(CMinisat *s);
+bool minisat_simplify(CMiniSat *s);
 
-bool minisat_solve(CMinisat *s, int len, minisat_Lit *ps);
-minisat_lbool minisat_limited_solve(CMinisat *s, int len, minisat_Lit *ps);
-void minisat_solve_begin(CMinisat *s);
-void minisat_solve_addLit(CMinisat *s, minisat_Lit p);
-bool minisat_solve_commit(CMinisat *s);
-minisat_lbool minisat_limited_solve_commit(CMinisat *s);
+bool minisat_solve(CMiniSat *s, int len, minisat_Lit *ps);
+minisat_lbool minisat_limited_solve(CMiniSat *s, int len, minisat_Lit *ps);
+void minisat_solve_begin(CMiniSat *s);
+void minisat_solve_addLit(CMiniSat *s, minisat_Lit p);
+bool minisat_solve_commit(CMiniSat *s);
+minisat_lbool minisat_limited_solve_commit(CMiniSat *s);
 
-bool minisat_okay(CMinisat *s);
+bool minisat_okay(CMiniSat *s);
 
-minisat_lbool minisat_value_Var(CMinisat *s, minisat_Var x);
-minisat_lbool minisat_value_Lit(CMinisat *s, minisat_Lit p);
-minisat_lbool minisat_modelValue_Var(CMinisat *s, minisat_Var x);
-minisat_lbool minisat_modelValue_Lit(CMinisat *s, minisat_Lit p);
+minisat_lbool minisat_value_Var(CMiniSat *s, minisat_Var x);
+minisat_lbool minisat_value_Lit(CMiniSat *s, minisat_Lit p);
+minisat_lbool minisat_modelValue_Var(CMiniSat *s, minisat_Var x);
+minisat_lbool minisat_modelValue_Lit(CMiniSat *s, minisat_Lit p);
 
-int minisat_conflict_len(CMinisat *s);
-minisat_Lit minisat_conflict_nthLit(CMinisat *s, int i);
+int minisat_conflict_len(CMiniSat *s);
+minisat_Lit minisat_conflict_nthLit(CMiniSat *s, int i);
 
-void minisat_set_conf_budget(CMinisat *s, int x);
-void minisat_set_prop_budget(CMinisat *s, int x);
-void minisat_no_budget(CMinisat *s);
+void minisat_set_conf_budget(CMiniSat *s, int x);
+void minisat_set_prop_budget(CMiniSat *s, int x);
+void minisat_no_budget(CMiniSat *s);
 
-void minisat_interrupt(CMinisat *s);
-void minisat_clearInterrupt(CMinisat *s);
+void minisat_interrupt(CMiniSat *s);
+void minisat_clearInterrupt(CMiniSat *s);
 
-void minisat_set_verbosity(CMinisat *s, int v);
-int minisat_get_verbosity(CMinisat *s);
-void minisat_set_random_var_freq(CMinisat *s, double random_var_freq);
-void minisat_set_random_seed(CMinisat *s, double random_seed);
+void minisat_set_verbosity(CMiniSat *s, int v);
+int minisat_get_verbosity(CMiniSat *s);
+void minisat_set_random_var_freq(CMiniSat *s, double random_var_freq);
+void minisat_set_random_seed(CMiniSat *s, double random_seed);
 
-int minisat_num_assigns(CMinisat *s);
-int minisat_num_clauses(CMinisat *s);
-int minisat_num_learnts(CMinisat *s);
-int minisat_num_vars(CMinisat *s);
-int minisat_num_freeVars(CMinisat *s);
-int64_t minisat_num_conflicts(CMinisat *s);
-int64_t minisat_num_decisions(CMinisat *s);
-int64_t minisat_num_restarts(CMinisat *s);
-int64_t minisat_num_propagations(CMinisat *s);
+int minisat_num_assigns(CMiniSat *s);
+int minisat_num_clauses(CMiniSat *s);
+int minisat_num_learnts(CMiniSat *s);
+int minisat_num_vars(CMiniSat *s);
+int minisat_num_freeVars(CMiniSat *s);
+int64_t minisat_num_conflicts(CMiniSat *s);
+int64_t minisat_num_decisions(CMiniSat *s);
+int64_t minisat_num_restarts(CMiniSat *s);
+int64_t minisat_num_propagations(CMiniSat *s);
 
 #ifdef __cplusplus
 }
