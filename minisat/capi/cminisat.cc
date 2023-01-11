@@ -31,7 +31,7 @@ struct CMiniSat : public SimpSolver {
 
 extern "C" {
 
-#include "cminiSat.h"
+#include "cminisat.h"
 
 // Note:
 //  `minisat_Var` (=`int`) can be converted to `Minisat::Var` (=`int`) via `mkLit`
