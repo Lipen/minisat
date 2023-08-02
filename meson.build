@@ -1,5 +1,16 @@
 project('minisat', 'cpp', version : '2.2.2')
 
+# -------------------
+# BUILD instructions:
+#
+#   meson setup builddir --buildtype release --strip
+#
+#   meson compile -C builddir
+#
+#   meson install -C builddir
+#
+# -------------------
+
 src = [
   'minisat/capi/cminisat.cc',
   'minisat/core/Solver.cc',
