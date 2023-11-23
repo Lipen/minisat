@@ -64,6 +64,7 @@ int main(int argc, char** argv)
         BoolOption   solve  ("MAIN", "solve",  "Completely turn on/off solving after preprocessing.", true);
         StringOption dimacs ("MAIN", "dimacs", "If given, stop after preprocessing and write the result to this file.");
         StringOption mapFile("MAIN", "mapfile", "If given, write map-file in addition to '-dimacs' option.");
+        StringOption freezeList("MAIN", "freeze", "Comma-separated list of non-negative 0-based variable indices to freeze).");
         IntOption    cpu_lim("MAIN", "cpu-lim","Limit on CPU time allowed in seconds.\n", 0, IntRange(0, INT32_MAX));
         IntOption    mem_lim("MAIN", "mem-lim","Limit on memory usage in megabytes.\n", 0, IntRange(0, INT32_MAX));
         BoolOption   strictp("MAIN", "strict", "Validate DIMACS header during parsing.", false);
@@ -112,6 +113,18 @@ int main(int argc, char** argv)
         // Change to signal-handlers that will only notify the solver and allow it to terminate
         // voluntarily:
         sigTerm(SIGINT_interrupt);
+
+        // Freeze the variables passed via '-freeze' option:
+        if (freezeList != NULL) {
+            char* s = strdup((const char*) freezeList);
+            char* p = strtok(s, ",");
+            while (p != NULL) {
+                Var v = atoi(p);
+                fprintf(stderr, "Freezing %d\n", v);
+                S.setFrozen(v, true);
+                p = strtok(NULL, ",");
+            }
+        }
 
         S.eliminate(true);
         double simplified_time = cpuTime();
