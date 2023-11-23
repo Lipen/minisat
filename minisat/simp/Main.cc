@@ -121,7 +121,7 @@ int main(int argc, char** argv)
             while (p != NULL) {
                 Var v = atoi(p);
                 fprintf(stderr, "Freezing %d\n", v);
-                S.setFrozen(v, true);
+                S.freezeVar(v);
                 p = strtok(NULL, ",");
             }
         }
