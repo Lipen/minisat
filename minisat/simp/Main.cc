@@ -63,6 +63,7 @@ int main(int argc, char** argv)
         BoolOption   pre    ("MAIN", "pre",    "Completely turn on/off any preprocessing.", true);
         BoolOption   solve  ("MAIN", "solve",  "Completely turn on/off solving after preprocessing.", true);
         StringOption dimacs ("MAIN", "dimacs", "If given, stop after preprocessing and write the result to this file.");
+        StringOption mapFile("MAIN", "mapfile", "If given, write map-file in addition to '-dimacs' option.");
         IntOption    cpu_lim("MAIN", "cpu-lim","Limit on CPU time allowed in seconds.\n", 0, IntRange(0, INT32_MAX));
         IntOption    mem_lim("MAIN", "mem-lim","Limit on memory usage in megabytes.\n", 0, IntRange(0, INT32_MAX));
         BoolOption   strictp("MAIN", "strict", "Validate DIMACS header during parsing.", false);
@@ -137,8 +138,9 @@ int main(int argc, char** argv)
         }else if (S.verbosity > 0)
             printf("===============================================================================\n");
 
-        if (dimacs && ret == l_Undef)
-            S.toDimacs((const char*)dimacs);
+        if (dimacs && ret == l_Undef) {
+            S.toDimacs((const char*)dimacs, (const char*)mapFile);
+        }
 
         if (S.verbosity > 0){
             S.printStats();
