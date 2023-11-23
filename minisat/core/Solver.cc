@@ -947,6 +947,9 @@ void Solver::toDimacs(const char* file, const char* mapFile) {
     }
     toDimacs(f, fMap);
     fclose(f);
+    if (fMap != NULL) {
+        fclose(fMap);
+    }
 }
 
 void Solver::toDimacs(FILE* f, FILE* fMap) {
