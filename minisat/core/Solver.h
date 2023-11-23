@@ -47,12 +47,12 @@ public:
     Var     newVar    (lbool upol = l_Undef, bool dvar = true); // Add a new variable with parameters specifying variable mode.
     void    releaseVar(Lit l);                                  // Make literal true and promise to never refer to variable again.
 
-    bool    addClause (const vec<Lit>& ps);                     // Add a clause to the solver. 
+    bool    addClause (const vec<Lit>& ps);                     // Add a clause to the solver.
     bool    addEmptyClause();                                   // Add the empty clause, making the solver contradictory.
-    bool    addClause (Lit p);                                  // Add a unit clause to the solver. 
-    bool    addClause (Lit p, Lit q);                           // Add a binary clause to the solver. 
-    bool    addClause (Lit p, Lit q, Lit r);                    // Add a ternary clause to the solver. 
-    bool    addClause (Lit p, Lit q, Lit r, Lit s);             // Add a quaternary clause to the solver. 
+    bool    addClause (Lit p);                                  // Add a unit clause to the solver.
+    bool    addClause (Lit p, Lit q);                           // Add a binary clause to the solver.
+    bool    addClause (Lit p, Lit q, Lit r);                    // Add a ternary clause to the solver.
+    bool    addClause (Lit p, Lit q, Lit r, Lit s);             // Add a quaternary clause to the solver.
     bool    addClause_(      vec<Lit>& ps);                     // Add a clause to the solver without making superflous internal copy. Will
                                                                 // change the passed vector 'ps'.
 
@@ -355,8 +355,8 @@ inline int      Solver::nVars         ()      const   { return next_var; }
 // TODO: nFreeVars() is not quite correct, try to calculate right instead of adapting it like below:
 inline int      Solver::nFreeVars     ()      const   { return (int)dec_vars - (trail_lim.size() == 0 ? trail.size() : trail_lim[0]); }
 inline void     Solver::setPolarity   (Var v, lbool b){ user_pol[v] = b; }
-inline void     Solver::setDecisionVar(Var v, bool b) 
-{ 
+inline void     Solver::setDecisionVar(Var v, bool b)
+{
     if      ( b && !decision[v]) dec_vars++;
     else if (!b &&  decision[v]) dec_vars--;
 

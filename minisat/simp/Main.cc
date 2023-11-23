@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     try {
         setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
         setX86FPUPrecision();
-        
+
         // Extra options:
         //
         IntOption    verb   ("MAIN", "verb",   "Verbosity level (0=silent, 1=some, 2=more).", 1, IntRange(0, 2));
@@ -69,14 +69,14 @@ int main(int argc, char** argv)
         BoolOption   strictp("MAIN", "strict", "Validate DIMACS header during parsing.", false);
 
         parseOptions(argc, argv, true);
-        
+
         SimpSolver  S;
         double      initial_time = cpuTime();
 
         if (!pre) S.eliminate(true);
 
         S.verbosity = verb;
-        
+
         solver = &S;
         // Use signal handlers that forcibly quit until the solver will be able to respond to
         // interrupts:
@@ -92,11 +92,11 @@ int main(int argc, char** argv)
         gzFile in = (argc == 1) ? gzdopen(0, "rb") : gzopen(argv[1], "rb");
         if (in == NULL)
             printf("ERROR! Could not open file: %s\n", argc == 1 ? "<stdin>" : argv[1]), exit(1);
-        
+
         if (S.verbosity > 0){
             printf("============================[ Problem Statistics ]=============================\n");
             printf("|                                                                             |\n"); }
-        
+
         parse_DIMACS(in, S, (bool)strictp);
         gzclose(in);
         FILE* res = (argc >= 3) ? fopen(argv[2], "wb") : NULL;
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
         if (S.verbosity > 0){
             printf("|  Number of variables:  %12d                                         |\n", S.nVars());
             printf("|  Number of clauses:    %12d                                         |\n", S.nClauses()); }
-        
+
         double parsed_time = cpuTime();
         if (S.verbosity > 0)
             printf("|  Parse time:           %12.2f s                                       |\n", parsed_time - initial_time);
@@ -132,11 +132,12 @@ int main(int argc, char** argv)
 
         lbool ret = l_Undef;
 
-        if (solve){
+        if (solve) {
             vec<Lit> dummy;
             ret = S.solveLimited(dummy);
-        }else if (S.verbosity > 0)
+        } else if (S.verbosity > 0) {
             printf("===============================================================================\n");
+        }
 
         if (dimacs && ret == l_Undef) {
             S.toDimacs((const char*)dimacs, (const char*)mapFile);
