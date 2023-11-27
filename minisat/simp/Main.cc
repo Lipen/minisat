@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         BoolOption   solve  ("MAIN", "solve",  "Completely turn on/off solving after preprocessing.", true);
         StringOption dimacs ("MAIN", "dimacs", "If given, stop after preprocessing and write the result to this file.");
         StringOption mapFile("MAIN", "mapfile", "If given, write map-file in addition to '-dimacs' option.");
-        StringOption freezeList("MAIN", "freeze", "Comma-separated list of non-negative 0-based variable indices to freeze).");
+        StringOption freezeList("MAIN", "freeze", "Comma-separated list of non-negative 0-based variable indices to freeze.");
         IntOption    cpu_lim("MAIN", "cpu-lim","Limit on CPU time allowed in seconds.\n", 0, IntRange(0, INT32_MAX));
         IntOption    mem_lim("MAIN", "mem-lim","Limit on memory usage in megabytes.\n", 0, IntRange(0, INT32_MAX));
         BoolOption   strictp("MAIN", "strict", "Validate DIMACS header during parsing.", false);
