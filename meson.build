@@ -19,6 +19,9 @@ src = [
   'minisat/utils/System.cc',
 ]
 
+add_project_arguments('-D__STDC_FORMAT_MACROS', '-D__STDC_LIMIT_MACROS',
+  language : 'cpp')
+
 zdep = dependency('zlib')
 
 lib = library('minisat', src,
