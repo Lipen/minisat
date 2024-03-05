@@ -22,15 +22,13 @@ src = [
 add_project_arguments('-D__STDC_FORMAT_MACROS', '-D__STDC_LIMIT_MACROS',
   language : 'cpp')
 
-zdep = dependency('zlib')
-
 lib = library('minisat', src,
-  install : true, dependencies : zdep)
+  install : true)
 
 exe_core = executable('minisat_core', 'minisat/core/Main.cc',
-  install : true, link_with : lib, dependencies : zdep)
+  install : true, link_with : lib)
 exe_simp = executable('minisat_simp', 'minisat/simp/Main.cc',
-  install : true, link_with : lib, dependencies : zdep)
+  install : true, link_with : lib)
 
 install_headers(
   'minisat/capi/cminisat.h',
