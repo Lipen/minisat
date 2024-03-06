@@ -42,7 +42,7 @@ class StreamBuffer {
     void assureLookahead() {
         if (pos >= size) {
             pos = 0;
-            size = fread(in, 1, buffer_size, in);
+            size = fread(buf, 1, buffer_size, in);
         }
     }
 
