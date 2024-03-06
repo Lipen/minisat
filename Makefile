@@ -69,8 +69,8 @@ else
 VERB=
 endif
 
-SRCS = $(wildcard minisat/core/*.cc) $(wildcard minisat/simp/*.cc) $(wildcard minisat/utils/*.cc)
-HDRS = $(wildcard minisat/mtl/*.h) $(wildcard minisat/core/*.h) $(wildcard minisat/simp/*.h) $(wildcard minisat/utils/*.h)
+SRCS = $(wildcard minisat/core/*.cc) $(wildcard minisat/simp/*.cc) $(wildcard minisat/utils/*.cc) $(wildcard minisat/capi/*.cc)
+HDRS = $(wildcard minisat/mtl/*.h) $(wildcard minisat/core/*.h) $(wildcard minisat/simp/*.h) $(wildcard minisat/utils/*.h) $(wildcard minisat/capi/*.h)
 OBJS = $(filter-out %Main.o, $(SRCS:.cc=.o))
 
 r:	$(BUILD_DIR)/release/bin/$(MINISAT)
@@ -172,7 +172,7 @@ install-debug:	install-headers install-lib-debug
 install-headers:
 #       Create directories
 	$(INSTALL) -d $(DESTDIR)$(includedir)/minisat
-	for dir in mtl utils core simp; do \
+	for dir in capi mtl utils core simp; do \
 	  $(INSTALL) -d $(DESTDIR)$(includedir)/minisat/$$dir ; \
 	done
 #       Install headers
