@@ -26,6 +26,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct CMiniSat CMiniSat;
 typedef int minisat_Var;
