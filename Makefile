@@ -1,6 +1,6 @@
 ###################################################################################################
 
-.PHONY:	r d p sh cr cd cp csh lr ld lp lsh config all install install-headers install-lib\
+.PHONY:	r d p sh cr cd cp csh lr ld lp lsh dll config all install install-headers install-lib\
         install-bin clean distclean
 all:	r lr lsh
 
@@ -53,6 +53,7 @@ MINISAT      = minisat#       Name of MiniSat main executable.
 MINISAT_CORE = minisat_core#  Name of simplified MiniSat executable (only core solver support).
 MINISAT_SLIB = lib$(MINISAT).a#  Name of MiniSat static library.
 MINISAT_DLIB = lib$(MINISAT).so# Name of MiniSat shared library.
+MINISAT_DLL  = $(MINISAT).dll#   Name of MiniSat DLL.
 
 # Shared Library Version
 SOMAJOR=2
@@ -87,6 +88,7 @@ lr:	$(BUILD_DIR)/release/lib/$(MINISAT_SLIB)
 ld:	$(BUILD_DIR)/debug/lib/$(MINISAT_SLIB)
 lp:	$(BUILD_DIR)/profile/lib/$(MINISAT_SLIB)
 lsh:	$(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR).$(SOMINOR)$(SORELEASE)
+dll:	$(BUILD_DIR)/$(MINISAT_DLL)
 
 ## Build-type Compile-flags:
 $(BUILD_DIR)/release/%.o:			MINISAT_CXXFLAGS +=$(MINISAT_REL) $(MINISAT_RELSYM)
@@ -121,6 +123,7 @@ $(BUILD_DIR)/profile/lib/$(MINISAT_SLIB):	$(foreach o,$(OBJS),$(BUILD_DIR)/profi
 $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR).$(SOMINOR)$(SORELEASE)\
  $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR)\
  $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB):	$(foreach o,$(OBJS),$(BUILD_DIR)/dynamic/$(o))
+$(BUILD_DIR)/$(MINISAT_DLL): $(foreach o,$(OBJS),$(BUILD_DIR)/dynamic/$(o))
 
 ## Compile rules (these should be unified, buit I have not yet found a way which works in GNU Make)
 $(BUILD_DIR)/release/%.o:	%.cc
@@ -166,6 +169,12 @@ $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR).$(SOMINOR)$(SORELEASE)\
 	$(VERB) ln -sf $(MINISAT_DLIB).$(SOMAJOR).$(SOMINOR)$(SORELEASE) $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR)
 	$(VERB) ln -sf $(MINISAT_DLIB).$(SOMAJOR) $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB)
 
+## Dynamic-Link Library rule
+$(BUILD_DIR)/$(MINISAT_DLL):
+	$(ECHO) Linking Dynamic-Link Library: $@
+	$(VERB) mkdir -p $(dir $@)
+	$(VERB) $(CXX) $(MINISAT_LDFLAGS) $(LDFLAGS) -o $@ -shared $^
+
 install:	install-headers install-lib install-bin
 install-debug:	install-headers install-lib-debug
 
@@ -202,7 +211,8 @@ clean:
 	  $(foreach t, release debug profile, $(BUILD_DIR)/$t/lib/$(MINISAT_SLIB)) \
 	  $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR).$(SOMINOR)$(SORELEASE)\
 	  $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB).$(SOMAJOR)\
-	  $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB)
+	  $(BUILD_DIR)/dynamic/lib/$(MINISAT_DLIB) \
+	  $(BUILD_DIR)/$(MINISAT_DLL)
 
 distclean:	clean
 	rm -f config.mk
