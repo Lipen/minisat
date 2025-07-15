@@ -70,7 +70,7 @@ minisat_Var minisat_newVar(CMiniSat *s) { return s->newVar(); }
 minisat_Lit minisat_newLit(CMiniSat *s) { return toInt(mkLit(s->newVar())); }
 
 minisat_Lit minisat_mkLit(minisat_Var x) { return toInt(mkLit(x)); }
-minisat_Lit minisat_mkLit_args(minisat_Var x, int sign) { return toInt(mkLit(x, sign)); }
+minisat_Lit minisat_mkLit_args(minisat_Var x, bool sign) { return toInt(mkLit(x, sign)); }
 minisat_Lit minisat_negate(minisat_Lit p) { return toInt(~toLit(p)); }
 minisat_Var minisat_var(minisat_Lit p) { return var(toLit(p)); }
 bool minisat_sign(minisat_Lit p) { return sign(toLit(p)); }
