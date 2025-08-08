@@ -25,11 +25,12 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 #define Minisat_C_Bindings_h
 
 #ifdef __cplusplus
+#include <cstdint>
 extern "C" {
-#endif
-
+#else
 #include <stdbool.h>
 #include <stdint.h>
+#endif
 
 typedef struct CMiniSat CMiniSat;
 typedef int minisat_Var;
