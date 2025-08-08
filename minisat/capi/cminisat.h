@@ -53,7 +53,7 @@ minisat_Var minisat_newVar(CMiniSat *s);
 minisat_Lit minisat_newLit(CMiniSat *s);
 
 minisat_Lit minisat_mkLit(minisat_Var x);
-minisat_Lit minisat_mkLit_args(minisat_Var x, bool sign);
+minisat_Lit minisat_mkLit_args(minisat_Var x, char sign);
 minisat_Lit minisat_negate(minisat_Lit p);
 minisat_Var minisat_var(minisat_Lit p);
 bool minisat_sign(minisat_Lit p);
